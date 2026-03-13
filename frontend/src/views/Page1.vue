@@ -109,7 +109,7 @@
       <div class="video-grid">
         <div v-for="card in cards" :key="card.id" class="video-card">
           <!-- Video Thumbnail -->
-          <div class="card-thumbnail" :style="{ background: card.bg }">
+          <div class="card-thumbnail">
             <div class="thumb-top">
               <div class="reels-badge">
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect width="12" height="12" rx="3" fill="white" fill-opacity="0.3"/><rect x="2" y="4" width="3" height="4" fill="white"/><rect x="6" y="2" width="4" height="8" fill="white" fill-opacity="0.6"/></svg>
@@ -123,6 +123,7 @@
             <div class="thumb-bottom-right">
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 16l4-4m0 0l4-4m-4 4l4 4m-4-4L4 8" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
             </div>
+            <img :src="card.thumb" :alt="card.author" class="thumb-img" />
             <!-- Overlay text for specific cards -->
             <div v-if="card.overlayText" class="thumb-overlay-text">
               <div class="overlay-en">{{ card.overlayEn }}</div>
@@ -185,10 +186,18 @@
 </template>
 
 <script setup lang="ts">
+// Thumbnail images — real portrait-style video thumbnails
+const thumbs = {
+  man: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=560&fit=crop&crop=face',
+  woman1: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&h=560&fit=crop&crop=face',
+  woman2: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=560&fit=crop&crop=face',
+  woman3: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&h=560&fit=crop&crop=face',
+}
+
 const cards = [
   {
     id: 1,
-    bg: 'linear-gradient(180deg, #8B7355 0%, #6B5340 100%)',
+    thumb: thumbs.man,
     views: '105k', likes: '85k', comments: '15k', shares: '485',
     author: '@blogerich', subs: '384.5K', avatarBg: 'linear-gradient(135deg, #667eea, #764ba2)',
     text: '500 000 лайков на ютубе делаем , бля буду скидываю 😎😎',
@@ -196,7 +205,7 @@ const cards = [
   },
   {
     id: 2,
-    bg: 'linear-gradient(180deg, #C4A882 0%, #8B6F50 100%)',
+    thumb: thumbs.woman1,
     views: '105k', likes: '85k', comments: '15k', shares: '485',
     author: '@blogerich', subs: '384.5K', avatarBg: 'linear-gradient(135deg, #667eea, #764ba2)',
     text: '500 000 лайков на ютубе делаем , бля буду скидываю 😎😎',
@@ -204,7 +213,7 @@ const cards = [
   },
   {
     id: 3,
-    bg: 'linear-gradient(180deg, #D4A8B8 0%, #A67888 100%)',
+    thumb: thumbs.woman2,
     views: '105k', likes: '85k', comments: '15k', shares: '485',
     author: '@blogerich', subs: '384.5K', avatarBg: 'linear-gradient(135deg, #ee5a6f, #f09819)',
     text: '500 000 лайков на ютубе делаем , бля буду скидываю 😎😎',
@@ -214,7 +223,7 @@ const cards = [
   },
   {
     id: 4,
-    bg: 'linear-gradient(180deg, #D4A8B8 0%, #A67888 100%)',
+    thumb: thumbs.woman3,
     views: '105k', likes: '85k', comments: '15k', shares: '485',
     author: '@blogerich', subs: '384.5K', avatarBg: 'linear-gradient(135deg, #ee5a6f, #f09819)',
     text: '500 000 лайков на ютубе делаем , бля буду скидываю 😎😎',
@@ -224,7 +233,7 @@ const cards = [
   },
   {
     id: 5,
-    bg: 'linear-gradient(180deg, #8B7355 0%, #6B5340 100%)',
+    thumb: thumbs.man,
     views: '105k', likes: '85k', comments: '15k', shares: '485',
     author: '@blogerich', subs: '384.5K', avatarBg: 'linear-gradient(135deg, #667eea, #764ba2)',
     text: '500 000 лайков на ютубе делаем , бля буду скидываю 😎😎',
@@ -232,7 +241,7 @@ const cards = [
   },
   {
     id: 6,
-    bg: 'linear-gradient(180deg, #C4A882 0%, #8B6F50 100%)',
+    thumb: thumbs.woman1,
     views: '105k', likes: '85k', comments: '15k', shares: '485',
     author: '@blogerich', subs: '384.5K', avatarBg: 'linear-gradient(135deg, #667eea, #764ba2)',
     text: '500 000 лайков на ютубе делаем , бля буду скидываю 😎😎',
@@ -240,7 +249,7 @@ const cards = [
   },
   {
     id: 7,
-    bg: 'linear-gradient(180deg, #D4A8B8 0%, #A67888 100%)',
+    thumb: thumbs.woman2,
     views: '105k', likes: '85k', comments: '15k', shares: '485',
     author: '@blogerich', subs: '384.5K', avatarBg: 'linear-gradient(135deg, #ee5a6f, #f09819)',
     text: '500 000 лайков на ютубе делаем , бля буду скидываю 😎😎',
@@ -250,7 +259,7 @@ const cards = [
   },
   {
     id: 8,
-    bg: 'linear-gradient(180deg, #D4A8B8 0%, #A67888 100%)',
+    thumb: thumbs.woman3,
     views: '105k', likes: '85k', comments: '15k', shares: '485',
     author: '@blogerich', subs: '384.5K', avatarBg: 'linear-gradient(135deg, #ee5a6f, #f09819)',
     text: '500 000 лайков на ютубе делаем , бля буду скидываю 😎😎',
@@ -507,6 +516,14 @@ const cards = [
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  background: #1a1a2e;
+}
+
+.thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .thumb-top {
