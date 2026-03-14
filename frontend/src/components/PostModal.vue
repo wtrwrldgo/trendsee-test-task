@@ -6,7 +6,18 @@
         <h2 class="modal-title">{{ publication.title }}</h2>
         <p class="modal-body">{{ publication.text }}</p>
         <div class="modal-meta">
-          <span>{{ formattedDate }}</span>
+          <div class="meta-row">
+            <span class="meta-label">User ID</span>
+            <span class="meta-value">{{ publication.user_id }}</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">Created</span>
+            <span class="meta-value">{{ formattedCreatedAt }}</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">Updated</span>
+            <span class="meta-value">{{ formattedUpdatedAt }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -25,15 +36,24 @@ defineEmits<{
   close: []
 }>()
 
-const formattedDate = computed(() => {
-  if (!props.publication) return ''
-  return new Date(props.publication.created_at).toLocaleDateString('en-US', {
+function formatDateTime(dateStr: string) {
+  return new Date(dateStr).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
   })
+}
+
+const formattedCreatedAt = computed(() => {
+  if (!props.publication) return ''
+  return formatDateTime(props.publication.created_at)
+})
+
+const formattedUpdatedAt = computed(() => {
+  if (!props.publication) return ''
+  return formatDateTime(props.publication.updated_at)
 })
 </script>
 
@@ -95,8 +115,24 @@ const formattedDate = computed(() => {
   margin-top: 24px;
   padding-top: 16px;
   border-top: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
   font-size: 13px;
+}
+
+.meta-label {
   color: #999;
+  font-weight: 500;
+}
+
+.meta-value {
+  color: #555;
 }
 
 /* Transition */
