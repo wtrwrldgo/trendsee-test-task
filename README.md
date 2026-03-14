@@ -35,6 +35,7 @@ docker-compose up --build
 - Publications are cached in Redis with 600s TTL on creation
 - Reading from cache is instant; cache miss triggers a 2s simulated delay before Postgres query
 - Cache keys: `pub:{id}`, `user_pubs:{user_id}:{limit}:{offset}`
+- On mutation, all paginated cache keys for the user are invalidated via SCAN pattern match
 
 ## Tech Stack
 

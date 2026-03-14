@@ -6,7 +6,7 @@ from app.database import get_pool
 async def create_user(name: str) -> asyncpg.Record:
     pool = get_pool()
     return await pool.fetchrow(
-        "INSERT INTO users (name) VALUES ($1) RETURNING id, name, created_at",
+        "INSERT INTO users (name) VALUES ($1) RETURNING id, name, created_at, updated_at",
         name,
     )
 
@@ -14,7 +14,7 @@ async def create_user(name: str) -> asyncpg.Record:
 async def get_user_by_id(user_id: int) -> asyncpg.Record | None:
     pool = get_pool()
     return await pool.fetchrow(
-        "SELECT id, name, created_at FROM users WHERE id = $1",
+        "SELECT id, name, created_at, updated_at FROM users WHERE id = $1",
         user_id,
     )
 
@@ -22,7 +22,7 @@ async def get_user_by_id(user_id: int) -> asyncpg.Record | None:
 async def update_user(user_id: int, name: str) -> asyncpg.Record | None:
     pool = get_pool()
     return await pool.fetchrow(
-        "UPDATE users SET name = $1 WHERE id = $2 RETURNING id, name, created_at",
+        "UPDATE users SET name = $1, updated_at = NOW() WHERE id = $2 RETURNING id, name, created_at, updated_at",
         name,
         user_id,
     )

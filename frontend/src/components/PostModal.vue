@@ -4,7 +4,7 @@
       <div class="modal-content">
         <button class="modal-close" @click="$emit('close')">&times;</button>
         <h2 class="modal-title">{{ publication.title }}</h2>
-        <p class="modal-body">{{ publication.content }}</p>
+        <p class="modal-body">{{ publication.text }}</p>
         <div class="modal-meta">
           <span>{{ formattedDate }}</span>
         </div>

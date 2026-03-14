@@ -104,7 +104,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"title\": \"My First Post\",\n  \"content\": \"This is the content of my first publication.\"\n}"
+              "raw": "{\n  \"title\": \"My First Post\",\n  \"text\": \"This is the text of my first publication.\"\n}"
             },
             "url": { "raw": "{{baseUrl}}/publications", "host": ["{{baseUrl}}"], "path": ["publications"] }
           }

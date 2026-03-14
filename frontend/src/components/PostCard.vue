@@ -21,7 +21,7 @@ defineEmits<{
 }>()
 
 const truncatedContent = computed(() => {
-  const text = props.publication.content
+  const text = props.publication.text
   return text.length > 150 ? text.slice(0, 150) + '...' : text
 })
 

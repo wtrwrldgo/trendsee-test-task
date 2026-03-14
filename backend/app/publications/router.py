@@ -17,7 +17,7 @@ async def create_publication(
     data: PublicationCreate,
     current_user_id: int = Depends(get_current_user),
 ):
-    return await service.create_publication(current_user_id, data.title, data.content)
+    return await service.create_publication(current_user_id, data.title, data.text)
 
 
 @router.get("/user/{user_id}", response_model=PaginatedPublications)
@@ -35,7 +35,7 @@ async def update_publication(
     data: PublicationUpdate,
     current_user_id: int = Depends(get_current_user),
 ):
-    return await service.update_publication(pub_id, data.title, data.content, current_user_id)
+    return await service.update_publication(pub_id, data.title, data.text, current_user_id)
 
 
 @router.delete("/{pub_id}", status_code=204)

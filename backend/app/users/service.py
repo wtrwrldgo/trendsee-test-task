@@ -7,7 +7,7 @@ from app.users.schemas import UserResponse, UserWithToken
 
 async def create_user(name: str) -> UserWithToken:
     row = await repository.create_user(name)
-    user = UserResponse(id=row["id"], name=row["name"], created_at=row["created_at"])
+    user = UserResponse(id=row["id"], name=row["name"], created_at=row["created_at"], updated_at=row["updated_at"])
     token = create_token(user.id)
     return UserWithToken(user=user, token=token)
 
@@ -25,7 +25,7 @@ async def update_user(user_id: int, name: str, current_user_id: int) -> UserResp
     row = await repository.update_user(user_id, name)
     if not row:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    return UserResponse(id=row["id"], name=row["name"], created_at=row["created_at"])
+    return UserResponse(id=row["id"], name=row["name"], created_at=row["created_at"], updated_at=row["updated_at"])
 
 
 async def delete_user(user_id: int, current_user_id: int) -> None:

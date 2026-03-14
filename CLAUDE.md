@@ -38,6 +38,7 @@ frontend/src/
 - Cache TTL: 600s. Cache miss adds `asyncio.sleep(2)` simulated delay
 - JWT auth via `get_current_user` FastAPI dependency
 - Redis key patterns: `pub:{id}`, `user_pubs:{user_id}:{limit}:{offset}`
+- Cache invalidation uses SCAN-based pattern delete for `user_pubs:{user_id}:*`
 
 ### Frontend
 - Vue 3 Composition API with `<script setup lang="ts">`

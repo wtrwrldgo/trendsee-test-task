@@ -10,19 +10,30 @@ from app.redis_client import get_redis
 CACHE_TTL = 600  # 10 minutes
 
 
+async def _invalidate_user_cache(r, user_id: int) -> None:
+    """Delete all paginated cache keys for a user using SCAN pattern match."""
+    cursor = 0
+    while True:
+        cursor, keys = await r.scan(cursor, match=f"user_pubs:{user_id}:*", count=100)
+        if keys:
+            await r.delete(*keys)
+        if cursor == 0:
+            break
+
+
 def _record_to_response(row) -> PublicationResponse:
     return PublicationResponse(
         id=row["id"],
         user_id=row["user_id"],
         title=row["title"],
-        content=row["content"],
+        text=row["text"],
         created_at=row["created_at"],
         updated_at=row["updated_at"],
     )
 
 
-async def create_publication(user_id: int, title: str, content: str) -> PublicationResponse:
-    row = await repository.create_publication(user_id, title, content)
+async def create_publication(user_id: int, title: str, text: str) -> PublicationResponse:
+    row = await repository.create_publication(user_id, title, text)
     pub = _record_to_response(row)
 
     # Cache in Redis
@@ -30,7 +41,7 @@ async def create_publication(user_id: int, title: str, content: str) -> Publicat
     await r.setex(f"pub:{pub.id}", CACHE_TTL, pub.model_dump_json())
 
     # Invalidate user publications list cache
-    await r.delete(f"user_pubs:{user_id}")
+    await _invalidate_user_cache(r, user_id)
 
     return pub
 
@@ -62,7 +73,7 @@ async def get_user_publications(
 
 
 async def update_publication(
-    pub_id: int, title: str | None, content: str | None, current_user_id: int
+    pub_id: int, title: str | None, text: str | None, current_user_id: int
 ) -> PublicationResponse:
     existing = await repository.get_publication_by_id(pub_id)
     if not existing:
@@ -70,13 +81,13 @@ async def update_publication(
     if existing["user_id"] != current_user_id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not allowed")
 
-    row = await repository.update_publication(pub_id, title, content)
+    row = await repository.update_publication(pub_id, title, text)
     pub = _record_to_response(row)
 
     # Update cache
     r = get_redis()
     await r.setex(f"pub:{pub.id}", CACHE_TTL, pub.model_dump_json())
-    await r.delete(f"user_pubs:{pub.user_id}")
+    await _invalidate_user_cache(r, pub.user_id)
 
     return pub
 
@@ -93,4 +104,4 @@ async def delete_publication(pub_id: int, current_user_id: int) -> None:
     # Invalidate caches
     r = get_redis()
     await r.delete(f"pub:{pub_id}")
-    await r.delete(f"user_pubs:{existing['user_id']}")
+    await _invalidate_user_cache(r, existing["user_id"])

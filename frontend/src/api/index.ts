@@ -16,7 +16,7 @@ export interface Publication {
   id: number
   user_id: number
   title: string
-  content: string
+  text: string
   created_at: string
   updated_at: string
 }
@@ -32,6 +32,7 @@ export interface User {
   id: number
   name: string
   created_at: string
+  updated_at: string
 }
 
 export const createUser = (name: string) =>
@@ -45,7 +46,7 @@ export const getUserPublications = (userId: number, limit = 10, offset = 0) =>
     params: { limit, offset },
   })
 
-export const createPublication = (title: string, content: string) =>
-  api.post<Publication>('/publications', { title, content })
+export const createPublication = (title: string, text: string) =>
+  api.post<Publication>('/publications', { title, text })
 
 export default api
